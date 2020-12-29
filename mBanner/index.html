@@ -61,81 +61,79 @@
         <a href="#"><img src="./images/3.jpg" alt="" /></a>
         <a href="#"><img src="./images/4.jpg" alt="" /></a>
       </div>
-      <div class="circle">
-        <span class="active"></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
     </div>
     <script>
-      var banner = document.querySelector(".banner"),
+     var banner = document.querySelector(".banner"),
         wrap = document.querySelector(".wrap"),
-        circle = document.querySelectorAll(".circle span"),
         imgWidth = banner.offsetWidth;
+        banner.insertAdjacentHTML('beforeend', '<div class="pagination"><span class="pagination_current">1</span> / <span class="pagination_total">0</span> </div>');
+    var pagination = document.querySelector(".pagination"),
+        paginationCurrent = pagination.children[0],
+        paginationTotal = pagination.children[1];
+    //init
+    wrap.innerHTML += wrap.innerHTML;
+    var len = wrap.children.length;
 
-      //init
-      wrap.innerHTML += wrap.innerHTML;
-      var len = wrap.children.length;
-      wrap.style.width = len * 100 + "vw";
-      wrap.style.transform = "translateX(0px)";
+    paginationTotal.innerText = len / 2;
+    wrap.style.width = len * 100 + "vw";
+    wrap.style.transform = "translateX(0px)";
 
-      var startPointX = 0, //手指按下的坐标
+    var startPointX = 0, //手指按下的坐标
         startLeft = 0, //手指按下时已经走的距离
         movePointX = 0, //手指移动的距离
         cn = 0,
         ln = 0,
         timer = null;
-      banner.addEventListener("touchstart", function (ev) {
+    banner.addEventListener("touchstart", function (ev) {
         clearInterval(timer);
         wrap.style.transition = null;
         if (cn == 0) {
-          cn = len / 2;
+            cn = len / 2;
         }
         if (cn == len - 1) {
-          cn = len / 2 - 1;
+            cn = len / 2 - 1;
         }
         wrap.style.transform = "translateX(" + -cn * imgWidth + "px)";
         startPointX = ev.changedTouches[0].pageX;
         startLeft = parseFloat(wrap.style.transform.split("(")[1]);
-      });
-      banner.addEventListener("touchmove", function (ev) {
+    });
+    banner.addEventListener("touchmove", function (ev) {
         movePointX = ev.changedTouches[0].pageX - startPointX;
         wrap.style.transform = "translateX(" + (movePointX + startLeft) + "px)";
-      });
-      banner.addEventListener("touchend", function (ev) {
+    });
+    banner.addEventListener("touchend", function (ev) {
         movePointX = ev.changedTouches[0].pageX - startPointX;
-        var backWidth = imgWidth / 8;
+        var backWidth = imgWidth / len;
         if (Math.abs(movePointX) > backWidth) {
-          cn -= movePointX / Math.abs(movePointX);
+            cn -= movePointX / Math.abs(movePointX);
         }
         wrap.style.transition = ".3s";
         wrap.style.transform = "translateX(" + -cn * imgWidth + "px)";
-
         var hn = cn % (len / 2);
-        circle[ln].className = "";
-        circle[hn].className = "active";
-        ln = hn;
-        timer = setInterval(move, 2000);
-      });
-
-      function move() {
+        paginationCurrent.innerText= hn+1;
+        timer = setInterval(move, 3000);
+    });
+    function move() {
         cn++;
-        wrap.style.transition = ".3s";
+        if (cn >= len - 1) {
+            cn = len - 1;
+        }
+        wrap.style.transition = '.3s';
         wrap.style.transform = "translateX(" + -cn * imgWidth + "px)";
-        wrap.addEventListener("transitionend", function () {
-          if (cn == len - 1) {
-            cn = len / 2 - 1;
-          }
-          wrap.style.transition = null;
-          wrap.style.transform = "translateX(" + -cn * imgWidth + "px)";
-        });
+        setTimeout(function () {
+            if (cn == len - 1) {
+                cn = len / 2 - 1;
+                wrap.style.transition = "none";
+            } else {
+                wrap.style.transition = ".3s";
+            }
+            wrap.style.transform = "translateX(" + -cn * imgWidth + "px)";
+
+        })
         var hn = cn % (len / 2);
-        circle[ln].className = "";
-        circle[hn].className = "active";
-        ln = hn;
-      }
-      timer = setInterval(move, 2000);
+        paginationCurrent.innerText = hn + 1;
+    }
+    timer = setInterval(move, 3000);
     </script>
   </body>
 </html>
