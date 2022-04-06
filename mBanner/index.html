@@ -25,6 +25,7 @@
         width: 100%;
         position: relative;
         overflow: hidden;
+        
       }
 
       .slide {
@@ -32,7 +33,9 @@
           display: -webkit-flex;
           display: flex;
           width: 100%;
-          flex-wrap: nowrap;
+          flex-wrap: nowrap; 
+          overflow-x: auto;
+          -webkit-overflow-scrolling:touch;
       }
 
       .slide a {
