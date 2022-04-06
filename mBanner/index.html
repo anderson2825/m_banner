@@ -85,6 +85,13 @@
     </div>
     <script>
       var Banner = new Carousel(".banner", true);
+      var mo = function (e) {
+        e.preventDefault();
+      }
+      function stop() {
+        document.body.addEventListener("touchmove",mo,false)
+      }
+      stop();
     </script>
   </body>
 </html>
