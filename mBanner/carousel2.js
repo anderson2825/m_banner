@@ -18,6 +18,9 @@
             startPointX = 0,
             startLeft = 0,
             movePointX = 0,
+            startPointY = 0,
+            endPointX = 0,
+            endPointY = 0,
             cn = 0,
             timer = null,
             imgWidth = banner.offsetWidth;
@@ -46,10 +49,16 @@
             }
             slide.style.transform = "translate3d(" + -cn * imgWidth + "px,0,0)";
             startPointX = ev.changedTouches[0].pageX;
+            startPointY = ev.changedTouches[0].pageY;
             startLeft = parseFloat(slide.style.transform.split("(")[1]);
         });
         banner.addEventListener("touchmove", function (ev) {
             movePointX = ev.changedTouches[0].pageX - startPointX;
+            endPointX =  ev.changedTouches[0].pageX;
+            endPointY =  ev.changedTouches[0].pageY;
+            if(Math.abs(startPointX - endPointX ) > Math.abs(startPointY - endPointY )){
+                ev.preventDefault();
+            }
             slide.style.transform = "translate3d(" + (movePointX + startLeft) + "px,0,0)";
         });
         banner.addEventListener("touchend", function (ev) {
