@@ -11,6 +11,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./carousel2.js" ></script>
     <title>Document</title>
     <style>
       body {
@@ -20,120 +21,68 @@
       img {
         vertical-align: middle;
       }
-      .banner {
-        width: 100vw;
+      .banner{
+        width: 100%;
         position: relative;
         overflow: hidden;
       }
-      .wrap {
-        display: flex;
-        width: 500vw;
-        flex-wrap: nowrap;
+
+      .slide {
+          display: -webkit-box;
+          display: -webkit-flex;
+          display: flex;
+          width: 500vw;
+          -webkit-flex-wrap: nowrap;
+          flex-wrap: nowrap
       }
-      .wrap a {
-        width: 100vw;
+
+      .slide a {
+          width: 100vw
       }
-      .wrap a img {
-        width: 100%;
+
+      .slide a img {
+          width: 100%;
+          vertical-align: middle
       }
-      .circle {
-        position: absolute;
-        bottom: 3vw;
-        width: 100vw;
-        display: flex;
-        justify-content: center;
+
+      .pagination {
+          position: absolute;
+          bottom: 0.3125rem;
+          right: 0.625rem;
+          width: 3.0rem;
+          height: 1.25rem;
+          color: #fff;
+          text-align: center;
+          font-size: 0.875rem;
+          line-height: 1.25rem;
+          border-radius: 0.625rem;
+          background: rgba(0,0,0,0.5)
       }
-      .circle span {
-        width: 25px;
-        height: 2px;
-        background: rgba(255, 255, 255, 0.5);
-      }
-      .circle span.active {
-        background: rgba(255, 255, 255, 1);
-      }
+
     </style>
   </head>
   <body>
     <div class="banner">
-      <div class="wrap">
-        <a href="https://juejin.cn/"><img src="./images/1.jpg" alt="" /></a>
-        <a href="https://juejin.cn/"><img src="./images/2.jpg" alt="" /></a>
-        <a href="https://juejin.cn/"><img src="./images/3.jpg" alt="" /></a>
-        <a href="https://juejin.cn/"><img src="./images/4.jpg" alt="" /></a>
-      </div>
+        <div class="slide" style="width: 3900px; transform: translateX(-2340px); transition: all 0.3s ease 0s;">
+                  <a href="https://promotion.geekbuying.com/promotion/april_fools_day">
+                      <img src="//img.gkbcdn.com/s3/bn/2204/640x300-6246b59e2b40c918f45ac073.jpg" border="0" alt="April Fools' Day">
+                  </a>
+                  <a href="https://m.geekbuying.com/item/Haylou-RS4-Smartwatch-Custom-Watch-Face-Black-497328.html">
+                      <img src="//img.gkbcdn.com/s3/bn/2203/640x300-62442ef92b40c9268c201a4c.jpg" border="0" alt="Haylou RS4">
+                  </a>
+                  <a href="https://promotion.geekbuying.com/promotion/miyoo_powiddy_game_consoles_sale">
+                      <img src="//img.gkbcdn.com/s3/bn/2203/640x300-6242bdc22b40c905e8ad97d9.jpg" border="0" alt="Miyoo Game Console">
+                  </a>
+                  <a href="https://promotion.geekbuying.com/promotion/top_10_3d_printers_2022" >
+                      <img src="//img.gkbcdn.com/s3/bn/2203/640x300-6234399b2b40c9018851d8d0.jpg" border="0" alt="TOP 10 3D Printers">
+                  </a>
+                  <a href="https://promotion.geekbuying.com/promotion/sculpfun_laser_engraver_sale" >
+                      <img src="//img.gkbcdn.com/s3/bn/2203/640x300-62384a7c2b40c92c8051c605.jpg" border="0" alt="Sculpfun Laser Engravers Sale">
+                  </a>
+        </div>
     </div>
     <script>
-     var banner = document.querySelector(".banner"),
-        wrap = document.querySelector(".wrap"),
-        imgWidth = banner.offsetWidth;
-        banner.insertAdjacentHTML('beforeend', '<div class="pagination"><span class="pagination_current">1</span> / <span class="pagination_total">0</span> </div>');
-    var pagination = document.querySelector(".pagination"),
-        paginationCurrent = pagination.children[0],
-        paginationTotal = pagination.children[1];
-    //init
-    wrap.innerHTML += wrap.innerHTML;
-    var len = wrap.children.length;
-
-    paginationTotal.innerText = len / 2;
-    wrap.style.width = len * 100 + "vw";
-    wrap.style.transform = "translateX(0px)";
-
-    var startPointX = 0, //手指按下的坐标
-        startLeft = 0, //手指按下时已经走的距离
-        movePointX = 0, //手指移动的距离
-        cn = 0,
-        ln = 0,
-        timer = null;
-    banner.addEventListener("touchstart", function (ev) {
-        clearInterval(timer);
-        wrap.style.transition = null;
-        if (cn == 0) {
-            cn = len / 2;
-        }
-        if (cn == len - 1) {
-            cn = len / 2 - 1;
-        }
-        wrap.style.transform = "translateX(" + -cn * imgWidth + "px)";
-        startPointX = ev.changedTouches[0].pageX;
-        startLeft = parseFloat(wrap.style.transform.split("(")[1]);
-    });
-    banner.addEventListener("touchmove", function (ev) {
-        movePointX = ev.changedTouches[0].pageX - startPointX;
-        wrap.style.transform = "translateX(" + (movePointX + startLeft) + "px)";
-    });
-    banner.addEventListener("touchend", function (ev) {
-        movePointX = ev.changedTouches[0].pageX - startPointX;
-        var backWidth = imgWidth / len;
-        if (Math.abs(movePointX) > backWidth) {
-            cn -= movePointX / Math.abs(movePointX);
-        }
-        wrap.style.transition = ".3s";
-        wrap.style.transform = "translateX(" + -cn * imgWidth + "px)";
-        var hn = cn % (len / 2);
-        paginationCurrent.innerText= hn+1;
-        timer = setInterval(move, 3000);
-    });
-    function move() {
-        cn++;
-        if (cn >= len - 1) {
-            cn = len - 1;
-        }
-        wrap.style.transition = '.3s';
-        wrap.style.transform = "translateX(" + -cn * imgWidth + "px)";
-        setTimeout(function () {
-            if (cn == len - 1) {
-                cn = len / 2 - 1;
-                wrap.style.transition = "none";
-            } else {
-                wrap.style.transition = ".3s";
-            }
-            wrap.style.transform = "translateX(" + -cn * imgWidth + "px)";
-
-        })
-        var hn = cn % (len / 2);
-        paginationCurrent.innerText = hn + 1;
-    }
-    timer = setInterval(move, 3000);
+      var Banner = new Carousel(".banner", true);
     </script>
   </body>
 </html>
