@@ -30,7 +30,7 @@
         var len = slide.children.length;
         paginationTotal ? paginationTotal.innerText = len / 2 : paginationTotal
         slide.style.width = len * banner.offsetWidth + "px";
-        slide.style.transform = "translateX(0px)";
+        slide.style.transform = "translate3d(0,0,0)";
         if(len<=2){
             pagination.remove();
             return false;
@@ -44,22 +44,23 @@
             if (cn == len - 1) {
                 cn = len / 2 - 1;
             }
-            slide.style.transform = "translateX(" + -cn * imgWidth + "px)";
+            slide.style.transform = "translate3d(" + -cn * imgWidth + "px,0,0)";
             startPointX = ev.changedTouches[0].pageX;
             startLeft = parseFloat(slide.style.transform.split("(")[1]);
         });
         banner.addEventListener("touchmove", function (ev) {
             movePointX = ev.changedTouches[0].pageX - startPointX;
-            slide.style.transform = "translateX(" + (movePointX + startLeft) + "px)";
+            slide.style.transform = "translate3d(" + (movePointX + startLeft) + "px,0,0)";
         });
         banner.addEventListener("touchend", function (ev) {
             movePointX = ev.changedTouches[0].pageX - startPointX;
-            var backWidth = imgWidth / len;
+            var backWidth = banner.offsetWidth/2;
+            console.log(movePointX,banner.offsetWidth,backWidth,imgWidth);
             if (Math.abs(movePointX) > backWidth) {
                 cn -= movePointX / Math.abs(movePointX);
             }
             slide.style.transition = ".3s";
-            slide.style.transform = "translateX(" + -cn * imgWidth + "px)";
+            slide.style.transform = "translate3d(" + -cn * imgWidth + "px,0,0)";
             var hn = cn % (len / 2);
             paginationCurrent.innerText = hn + 1;
             self.autoplay ? timer = setInterval(move, 4000) : self.autoplay;
@@ -70,7 +71,7 @@
                 cn = len - 1;
             }
             slide.style.transition = '.3s';
-            slide.style.transform = "translateX(" + -cn * imgWidth + "px)";
+            slide.style.transform = "translate3d(" + -cn * imgWidth + "px,0,0)";
             setTimeout(function () {
                 if (cn == len - 1) {
                     cn = len / 2 - 1;
@@ -78,7 +79,7 @@
                 } else {
                     slide.style.transition = ".3s";
                 }
-                slide.style.transform = "translateX(" + -cn * imgWidth + "px)";
+                slide.style.transform = "translate3d(" + -cn * imgWidth + "px,0,0)";
 
             },100)
             var hn = cn % (len / 2);
