@@ -1,0 +1,139 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-12-28 23:13:42
+ * @LastEditTime: 2020-12-29 00:26:50
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /undefined/Users/de2825/Documents/github_zdl/mBanner/index.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        margin: 0;
+        background: #eee;
+      }
+      img {
+        vertical-align: middle;
+      }
+      .banner {
+        width: 100vw;
+        position: relative;
+        overflow: hidden;
+      }
+      .wrap {
+        display: flex;
+        width: 500vw;
+        flex-wrap: nowrap;
+      }
+      .wrap a {
+        width: 100vw;
+      }
+      .wrap a img {
+        width: 100%;
+      }
+      .circle {
+        position: absolute;
+        bottom: 3vw;
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+      }
+      .circle span {
+        width: 25px;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.5);
+      }
+      .circle span.active {
+        background: rgba(255, 255, 255, 1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="banner">
+      <div class="wrap">
+        <a href="#"><img src="./images/1.jpg" alt="" /></a>
+        <a href="#"><img src="./images/2.jpg" alt="" /></a>
+        <a href="#"><img src="./images/3.jpg" alt="" /></a>
+        <a href="#"><img src="./images/4.jpg" alt="" /></a>
+      </div>
+    </div>
+    <script>
+     var banner = document.querySelector(".banner"),
+        wrap = document.querySelector(".wrap"),
+        imgWidth = banner.offsetWidth;
+        banner.insertAdjacentHTML('beforeend', '<div class="pagination"><span class="pagination_current">1</span> / <span class="pagination_total">0</span> </div>');
+    var pagination = document.querySelector(".pagination"),
+        paginationCurrent = pagination.children[0],
+        paginationTotal = pagination.children[1];
+    //init
+    wrap.innerHTML += wrap.innerHTML;
+    var len = wrap.children.length;
+
+    paginationTotal.innerText = len / 2;
+    wrap.style.width = len * 100 + "vw";
+    wrap.style.transform = "translateX(0px)";
+
+    var startPointX = 0, //手指按下的坐标
+        startLeft = 0, //手指按下时已经走的距离
+        movePointX = 0, //手指移动的距离
+        cn = 0,
+        ln = 0,
+        timer = null;
+    banner.addEventListener("touchstart", function (ev) {
+        clearInterval(timer);
+        wrap.style.transition = null;
+        if (cn == 0) {
+            cn = len / 2;
+        }
+        if (cn == len - 1) {
+            cn = len / 2 - 1;
+        }
+        wrap.style.transform = "translateX(" + -cn * imgWidth + "px)";
+        startPointX = ev.changedTouches[0].pageX;
+        startLeft = parseFloat(wrap.style.transform.split("(")[1]);
+    });
+    banner.addEventListener("touchmove", function (ev) {
+        movePointX = ev.changedTouches[0].pageX - startPointX;
+        wrap.style.transform = "translateX(" + (movePointX + startLeft) + "px)";
+    });
+    banner.addEventListener("touchend", function (ev) {
+        movePointX = ev.changedTouches[0].pageX - startPointX;
+        var backWidth = imgWidth / len;
+        if (Math.abs(movePointX) > backWidth) {
+            cn -= movePointX / Math.abs(movePointX);
+        }
+        wrap.style.transition = ".3s";
+        wrap.style.transform = "translateX(" + -cn * imgWidth + "px)";
+        var hn = cn % (len / 2);
+        paginationCurrent.innerText= hn+1;
+        timer = setInterval(move, 3000);
+    });
+    function move() {
+        cn++;
+        if (cn >= len - 1) {
+            cn = len - 1;
+        }
+        wrap.style.transition = '.3s';
+        wrap.style.transform = "translateX(" + -cn * imgWidth + "px)";
+        setTimeout(function () {
+            if (cn == len - 1) {
+                cn = len / 2 - 1;
+                wrap.style.transition = "none";
+            } else {
+                wrap.style.transition = ".3s";
+            }
+            wrap.style.transform = "translateX(" + -cn * imgWidth + "px)";
+
+        })
+        var hn = cn % (len / 2);
+        paginationCurrent.innerText = hn + 1;
+    }
+    timer = setInterval(move, 3000);
+    </script>
+  </body>
+</html>
