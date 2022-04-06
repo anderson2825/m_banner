@@ -16,6 +16,7 @@
     <style>
       body {
         margin: 0;
+        height: 3000px;
         background: #eee;
       }
       img {
@@ -86,10 +87,11 @@
     <script>
       var Banner = new Carousel(".banner", true);
       var mo = function (e) {
+        console.log(1);
         e.preventDefault();
       }
       function stop() {
-        document.body.addEventListener("touchmove",mo,false)
+        document.body.addEventListener("touchmove",mo,{ passive: false })
       }
       stop();
     </script>
