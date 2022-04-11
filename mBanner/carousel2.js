@@ -49,6 +49,7 @@
             }
             slide.style.transform = "translateX(" + -cn * imgWidth + "px)";
             startPointX = ev.changedTouches[0].pageX;
+            startPointY = ev.changedTouches[0].pageY;
             startLeft = parseFloat(slide.style.transform.split("(")[1]);
         });
         banner.addEventListener("touchmove", function (ev) {
